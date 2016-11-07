@@ -3,12 +3,12 @@ from decouple import config
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-API_URL = config('API_URL', default='http://10.120.89.137')
+API_URL = config('API_URL', default='http://localhost')
 
 DEFAULT_LOG_FILE = config(
-    "DEFAULT_LOG_FILE", default='/var/log/flask_api/app.log')
+    "DEFAULT_LOG_FILE", default='/var/log/flask-ping/app.log')
 CRONTAB_LOG_FILE = config(
-    "CRONTAB_LOG_FILE", default='/var/log/flask_api/crontab.log')
+    "CRONTAB_LOG_FILE", default='/var/log/flask-pingcrontab.log')
 
 JSON_AS_ASCII = False
 

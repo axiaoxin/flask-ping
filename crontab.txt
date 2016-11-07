@@ -1,0 +1,2 @@
+﻿PYTHONPATH=/srv/flask-ping/service
+*/1 * * * * /srv/.venv/bin/python /srv/flask-ping/service/cron/cron.py >> /var/log/ping/crontab.log 2>&1
