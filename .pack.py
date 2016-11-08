@@ -6,8 +6,8 @@ import zipfile
 
 base_dir = os.path.dirname(os.path.realpath(__file__))
 packtime_path = os.path.join(base_dir, '.packtime')
-zip_path = os.path.join(base_dir, 'biz_checkup_web_service.zip')
-sync_path = 'E:/sync/biz_checkup_web_service.zip'
+zip_path = os.path.join(base_dir, 'flask-ping.zip')
+sync_path = 'E:/flask-ping.zip'
 
 
 def zip_dir(dir_name, zipfile_name):

@@ -8,7 +8,7 @@ API_URL = config('API_URL', default='http://localhost')
 DEFAULT_LOG_FILE = config(
     "DEFAULT_LOG_FILE", default='/var/log/flask-ping/app.log')
 CRONTAB_LOG_FILE = config(
-    "CRONTAB_LOG_FILE", default='/var/log/flask-pingcrontab.log')
+    "CRONTAB_LOG_FILE", default='/var/log/flask-ping/crontab.log')
 
 JSON_AS_ASCII = False
 
