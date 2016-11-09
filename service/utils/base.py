@@ -4,18 +4,27 @@ import datetime
 from functools import wraps
 from contextlib import contextmanager
 
-from flask_mail import Message
-
-from extensions import mail
-from settings import MAIL_SENDER
 from response import response, ResponseCode
 from log import get_logger
 
 logger = get_logger(__name__)
 
 
+def is_ipv4(ip):
+    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip):
+        return True
+    return False
+
+
 def get_sep_list(s, sep=','):
     return s.split(sep)
+
+
+def datetime2timestamp(dt, is_int=True):
+    ts = time.mktime(dt.timetuple())
+    if is_int:
+        ts = int(ts)
+    return ts
 
 
 def datetime2str(dt, str_format='%Y-%m-%d %H:%M:%S'):
@@ -36,19 +45,6 @@ def get_serializable_model_dict(model, pop=[]):
     model.__dict__.pop('_sa_instance_state', None)
 
     return model.__dict__
-
-
-def send_flask_mail(subject, recipients, cc=None, body=None,
-                    html=None, sender=MAIL_SENDER):
-    msg = Message(
-        subject=subject,
-        sender=sender,
-        recipients=recipients,
-        cc=cc,
-        body=body,
-        html=html,
-    )
-    mail.send(msg)
 
 
 def keyerror_response(func):
