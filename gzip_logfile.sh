@@ -1,6 +1,6 @@
-﻿#! /usr/bin/bash
+#! /usr/bin/env bash
 
-log_path="/var/log/flask-ping"
+log_path="/var/log/flask_api"
 yesterday=`date -d '-1 day' +%Y%m%d`
 
 mv $log_path/app.log $log_path/app.$yesterday.log
