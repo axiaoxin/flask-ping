@@ -27,6 +27,11 @@ def datetime2timestamp(dt, is_int=True):
     return ts
 
 
+def timestamp2str(ts, str_format='%Y-%m-%d %H:%M:%S'):
+    dt = datetime.datetime.utcfromtimestamp(ts)
+    return dt.strftime(str_format)
+
+
 def datetime2str(dt, str_format='%Y-%m-%d %H:%M:%S'):
     return dt.strftime(str_format)
 
