@@ -27,13 +27,20 @@ def datetime2timestamp(dt, is_int=True):
     return ts
 
 
-def timestamp2str(ts, str_format='%Y-%m-%d %H:%M:%S'):
-    dt = datetime.datetime.utcfromtimestamp(ts)
+def timestamp2str(ts, str_format='%Y-%m-%d %H:%M:%S', utc=False):
+    if utc:
+        dt = datetime.datetime.utcfromtimestamp(ts)
+    else:
+        dt = datetime.datetime.fromtimestamp(ts)
     return dt.strftime(str_format)
 
 
 def datetime2str(dt, str_format='%Y-%m-%d %H:%M:%S'):
     return dt.strftime(str_format)
+
+
+def format_timestr(timestr, from_format, to_format='%Y-%m-%d %H:%M:%S'):
+    return datetime.datetime.strptime(timestr, from_format).strftime(to_format)
 
 
 def get_serializable_model_dict(model, pop=[]):
