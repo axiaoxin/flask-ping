@@ -6,7 +6,7 @@ from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
 
 from response import response, ResponseCode
-from ping_api import ping_api
+from routes.ping import ping
 
 
 app = Flask(__name__)
@@ -34,8 +34,8 @@ def hello_world():
         return packtime.read()
 
 
-app.register_blueprint(ping_api, url_prefix='/ping')
+app.register_blueprint(ping, url_prefix='/ping')
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0')
+    app.run()

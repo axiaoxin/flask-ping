@@ -3,7 +3,7 @@
 from peewee import Model
 from playhouse.shortcuts import RetryOperationalError
 from playhouse.pool import PooledMySQLDatabase
-from settings import DEBUG
+from settings import DEBUG, DATABASE
 
 
 class MySQLRetryDB(RetryOperationalError, PooledMySQLDatabase):
@@ -11,11 +11,9 @@ class MySQLRetryDB(RetryOperationalError, PooledMySQLDatabase):
 
 
 if DEBUG:
-    mysql_db = MySQLRetryDB('test', user='root', password='root',
-                            max_connections=40)
+    mysql_db = MySQLRetryDB(**DATABASE['testing'])
 else:
-    mysql_db = MySQLRetryDB('flask_ping', user='root', password='root',
-                            max_connections=40)
+    mysql_db = MySQLRetryDB(**DATABASE['prod'])
 
 
 class MySQLBaseModel(Model):

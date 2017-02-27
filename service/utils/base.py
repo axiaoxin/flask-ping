@@ -101,3 +101,23 @@ def pw_auto_manage_connect(db):
                     db.close()
         return wrap
     return deco
+
+
+def log_func_call(func):
+    '''Decorator to log function call'''
+    @wraps(func)
+    def wrapper(*func_args, **func_kwargs):
+        arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
+        args = func_args[:len(arg_names)]
+        defaults = func.func_defaults or ()
+        args = args + defaults[len(defaults) - (func.func_code.co_argcount - len(args)):]
+        params = zip(arg_names, args)
+        args = func_args[len(arg_names):]
+        if args: params.append(('args', args))
+        if func_kwargs: params.append(('kwargs', func_kwargs))
+        func_call = u'{func_name}({params})'.format(
+                func_name=func.func_name,
+                params=', '.join('%s=%r' % p for p in params))
+        logger.info(func_call)
+        return func(*func_args, **func_kwargs)
+    return wrapper

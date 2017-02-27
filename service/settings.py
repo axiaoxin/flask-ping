@@ -11,3 +11,22 @@ CRONTAB_LOG_FILE = config(
     "CRONTAB_LOG_FILE", default='/tmp/crontab.log')
 
 JSON_AS_ASCII = False
+
+DATABASE = {
+    'testing': {
+        'database': 'test',
+        'host': 'localhost',
+        'user': 'root',
+        'password': 'root',
+        'charset': 'utf8mb4',
+        'max_connections': 40
+    },
+    'prod': {
+        'database': 'prod',
+        'host': 'localhost',
+        'user': 'root',
+        'password': 'root',
+        'charset': 'utf8mb4',
+        'max_connections': 40
+    }
+}

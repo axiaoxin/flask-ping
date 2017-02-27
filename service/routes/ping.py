@@ -2,18 +2,18 @@ from flask import Blueprint
 from response import response
 from utils.base import pw_auto_manage_connect
 from models import mysql_db
-from .handlers.demo import demo
+from handlers.ping import demo
 
 
-ping_api = Blueprint('ping_api', __name__)
+ping = Blueprint('ping', __name__)
 
 
-@ping_api.route('/')
-def ping():
+@ping.route('/')
+def ping_route():
     return response(data='pong')
 
 
-@ping_api.route('/demo')
+@ping.route('/demo')
 @pw_auto_manage_connect(mysql_db)
 def demo_route():
     data = demo()
