@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from decouple import config
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 API_URL = config('API_URL', default='http://localhost:5000')
 
