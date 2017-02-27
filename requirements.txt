@@ -1,9 +1,7 @@
 flask
-pytest
-flask-sqlalchemy
-flask-script
-requests
+peewee
 pymysql
-gunicorn
-python-decouple
 gevent
+python-decouple
+flask-script
+gunicorn

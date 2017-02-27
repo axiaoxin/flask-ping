@@ -1,5 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
+import time
 import datetime
 from functools import wraps
 from contextlib import contextmanager
@@ -27,11 +29,8 @@ def datetime2timestamp(dt, is_int=True):
     return ts
 
 
-def timestamp2str(ts, str_format='%Y-%m-%d %H:%M:%S', utc=False):
-    if utc:
-        dt = datetime.datetime.utcfromtimestamp(ts)
-    else:
-        dt = datetime.datetime.fromtimestamp(ts)
+def timestamp2str(ts, str_format='%Y-%m-%d %H:%M:%S'):
+    dt = datetime.datetime.utcfromtimestamp(ts)
     return dt.strftime(str_format)
 
 
@@ -39,24 +38,26 @@ def datetime2str(dt, str_format='%Y-%m-%d %H:%M:%S'):
     return dt.strftime(str_format)
 
 
-def format_timestr(timestr, from_format, to_format='%Y-%m-%d %H:%M:%S'):
-    return datetime.datetime.strptime(timestr, from_format).strftime(to_format)
-
-
-def get_serializable_model_dict(model, pop=[]):
+def get_serializable_model_dict(model, pop=[], orm='peewee'):
     if not model:
         return
-    for k, v in model.__dict__.iteritems():
+
+    data = model.__dict__
+    if orm == 'sqlalchemy':
+        data.pop('_sa_instance_state', None)
+    elif orm == 'peewee':
+        data = model._data
+
+    for k, v in data.iteritems():
         if isinstance(v, datetime.date):
-            model.__dict__[k] = datetime2str(v, '%Y-%m-%d')
+            data[k] = datetime2str(v, '%Y-%m-%d')
         if isinstance(v, datetime.datetime):
-            model.__dict__[k] = datetime2str(v)
+            data[k] = datetime2str(v)
 
     for field in pop:
-        model.__dict__.pop(field, None)
-    model.__dict__.pop('_sa_instance_state', None)
+        data.pop(field, None)
 
-    return model.__dict__
+    return data
 
 
 def keyerror_response(func):
@@ -72,8 +73,9 @@ def keyerror_response(func):
 
 
 @contextmanager
-def db_session_scope(session, commit=False):
-    """Provide a transactional scope around a series of operations."""
+def sa_session_scope(session, commit=False):
+    """Provide a transactional scope around a series of operations
+    for sqlalchemy."""
     try:
         yield session
         if commit:
@@ -84,3 +86,18 @@ def db_session_scope(session, commit=False):
         raise
     finally:
         session.close()
+
+
+def pw_auto_manage_connect(db):
+    def deco(func):
+        @wraps(func)
+        def wrap(*args, **kwargs):
+            try:
+                db.connect()
+                data = func(*args, **kwargs)
+                return data
+            finally:
+                if not db.is_closed():
+                    db.close()
+        return wrap
+    return deco

@@ -9,7 +9,8 @@ def get_logger(logger_name, log_file=DEFAULT_LOG_FILE):
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(
-        '%(asctime)s %(name)s %(levelname)s %(message)s')
+        '%(asctime)s %(name)s %(levelname)s %(message)s',
+        '%Y-%m-%d %H:%M:%S')
 
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.INFO)
