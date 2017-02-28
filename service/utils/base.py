@@ -1,5 +1,9 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import gevent
+from gevent.monkey import patch_all
+patch_all()  # noqa
+
 import re
 import time
 import datetime
@@ -7,9 +11,7 @@ from functools import wraps
 from contextlib import contextmanager
 
 from response import response, ResponseCode
-from log import get_logger
-
-logger = get_logger(__name__)
+import log
 
 
 def is_ipv4(ip):
@@ -67,7 +69,7 @@ def keyerror_response(func):
             return func(*args, **kwargs)
         except KeyError as e:
             data = u'缺少参数:{0}'.format(e)
-            logger.warning(data)
+            log.warning(data)
             return response(code=ResponseCode.BAD_REQUEST, data=data)
     return wrap
 
@@ -82,7 +84,7 @@ def sa_session_scope(session, commit=False):
             session.commit()
     except Exception as e:
         session.rollback()
-        logger.exception(str(e))
+        log.error(e)
         raise
     finally:
         session.close()
@@ -103,21 +105,31 @@ def pw_auto_manage_connect(db):
     return deco
 
 
+def _log_func_call(func, use_time, *func_args, **func_kwargs):
+    arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
+    args = func_args[:len(arg_names)]
+    defaults = func.func_defaults or ()
+    args = args + defaults[len(defaults) - (func.func_code.co_argcount - len(args)):]
+    params = zip(arg_names, args)
+    args = func_args[len(arg_names):]
+    if args:
+        params.append(('args', args))
+    if func_kwargs:
+        params.append(('kwargs', func_kwargs))
+    func_call = u'{func_name}({params}) {use_time}ms'.format(
+            func_name=func.func_name,
+            params=', '.join('%s=%r' % p for p in params),
+            use_time=use_time * 1000)
+    log.info(func_call)
+
+
 def log_func_call(func):
     '''Decorator to log function call'''
     @wraps(func)
     def wrapper(*func_args, **func_kwargs):
-        arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
-        args = func_args[:len(arg_names)]
-        defaults = func.func_defaults or ()
-        args = args + defaults[len(defaults) - (func.func_code.co_argcount - len(args)):]
-        params = zip(arg_names, args)
-        args = func_args[len(arg_names):]
-        if args: params.append(('args', args))
-        if func_kwargs: params.append(('kwargs', func_kwargs))
-        func_call = u'{func_name}({params})'.format(
-                func_name=func.func_name,
-                params=', '.join('%s=%r' % p for p in params))
-        logger.info(func_call)
-        return func(*func_args, **func_kwargs)
+        start_time = time.time()
+        data = func(*func_args, **func_kwargs)
+        use_time = time.time() - start_time
+        gevent.spawn(_log_func_call, func, use_time, *func_args, **func_kwargs)
+        return data
     return wrapper
