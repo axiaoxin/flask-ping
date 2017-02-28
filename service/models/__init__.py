@@ -3,17 +3,18 @@
 from peewee import Model
 from playhouse.shortcuts import RetryOperationalError
 from playhouse.pool import PooledMySQLDatabase
-from settings import DEBUG, DATABASE
+from playhouse.db_url import connect, schemes
+from settings import DB_URL
 
 
 class MySQLRetryDB(RetryOperationalError, PooledMySQLDatabase):
     pass
 
 
-if DEBUG:
-    mysql_db = MySQLRetryDB(**DATABASE['testing'])
-else:
-    mysql_db = MySQLRetryDB(**DATABASE['prod'])
+schemes['mysql+pool+retry'] = MySQLRetryDB
+
+
+mysql_db = connect(DB_URL)
 
 
 class MySQLBaseModel(Model):

@@ -12,21 +12,4 @@ CRONTAB_LOG_FILE = config(
 
 JSON_AS_ASCII = False
 
-DATABASE = {
-    'testing': {
-        'database': 'test',
-        'host': 'localhost',
-        'user': 'root',
-        'password': 'root',
-        'charset': 'utf8mb4',
-        'max_connections': 40
-    },
-    'prod': {
-        'database': 'prod',
-        'host': 'localhost',
-        'user': 'root',
-        'password': 'root',
-        'charset': 'utf8mb4',
-        'max_connections': 40
-    }
-}
+DB_URL = config('DB_URL')

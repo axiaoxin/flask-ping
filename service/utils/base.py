@@ -95,6 +95,7 @@ def pw_auto_manage_connect(db):
         @wraps(func)
         def wrap(*args, **kwargs):
             try:
+                # db.get_conn().ping(True)
                 db.connect()
                 data = func(*args, **kwargs)
                 return data
