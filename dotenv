@@ -1,3 +1,6 @@
 DEBUG=True
 
-DEFAULT_LOG_FILE='/tmp/app.log'
+DEFAULT_LOG_FILE=/tmp/app.log
+
+#http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#db-url
+DB_URL=mysql+pool+retry://root:root@localhost:3306/test?max_connections=40&stale_timeout=300&charset=utf8mb4
