@@ -25,12 +25,19 @@ def _get_all_handler_modules():
 
 
 def _register_decorator_for_all_handlers(decorator):
-    '''将decorator注册到handlers下的所有函数'''
+    '''将decorator自动注册到handlers下的所有函数
+    函数中设置__nodeco__属性为False则不自动注册任何装饰器
+    eg:
+        def func():
+            pass
+        func.__nodeco__ = True'''
     modules = _get_all_handler_modules()
     for module in modules:
         for key, value in vars(module).iteritems():
             if (isinstance(value, types.FunctionType) and
                     inspect.getmodule(value).__name__.startswith('handlers')):
+                if getattr(value, '__nodeco__', False):
+                    continue
                 vars(module)[key] = decorator(value)
 
 
