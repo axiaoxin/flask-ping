@@ -4,6 +4,7 @@ import gevent
 from gevent.monkey import patch_all
 patch_all()  # noqa
 
+import inspect
 import re
 import time
 import datetime
@@ -62,6 +63,14 @@ def get_serializable_model_dict(model, pop=[], orm='peewee'):
     return data
 
 
+def get_func_name(func, full=True):
+    if full:
+        return '{}.{}'.format(inspect.getmodule(func).__name__,
+                              func.__name__)
+    else:
+        return func.__name__
+
+
 def keyerror_response(func):
     @wraps(func)
     def wrap(*args, **kwargs):
@@ -110,15 +119,17 @@ def _log_func_call(func, use_time, *func_args, **func_kwargs):
     arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
     args = func_args[:len(arg_names)]
     defaults = func.func_defaults or ()
-    args = args + defaults[len(defaults) - (func.func_code.co_argcount - len(args)):]
+    args = args + defaults[len(defaults) -
+                           (func.func_code.co_argcount - len(args)):]
     params = zip(arg_names, args)
     args = func_args[len(arg_names):]
     if args:
         params.append(('args', args))
     if func_kwargs:
         params.append(('kwargs', func_kwargs))
+    func_name = get_func_name(func)
     func_call = u'{func_name}({params}) {use_time}ms'.format(
-            func_name=func.func_name,
+            func_name=func_name,
             params=', '.join('%s=%r' % p for p in params),
             use_time=use_time * 1000)
     log.info(func_call)
