@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from models.demo import Demo
-from utils.base import get_serializable_model_dict, log_func_call
+from utils.base import get_serializable_model_dict
 
 
 def demo():
