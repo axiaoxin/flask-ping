@@ -1,7 +1,5 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import logging
-
 from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
 from raven.contrib.flask import Sentry

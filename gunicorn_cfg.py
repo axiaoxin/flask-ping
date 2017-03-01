@@ -9,5 +9,5 @@ pidfile = '/var/run/flask-ping.pid'
 raw_env = []
 pythonpath = '/srv/flask-ping/service'
 accesslog = '/data/log/flask-ping/gunicorn.acc.log'
-access_log_format = '%(t)s %(h)s %(s)s "%(r)s" "%(f)s" "%(a)s" "%({Header}i)s"'
+access_log_format = '%(t)s %(h)s %(s)s "%(r)s" %(b)s "%(f)s" "%(a)s" "%({Header}i)s"'
 errorlog = '/data/log/flask-ping/gunicorn.err.log'
