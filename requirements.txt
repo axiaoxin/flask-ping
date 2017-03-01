@@ -3,6 +3,5 @@ peewee
 pymysql
 gevent
 python-decouple
-flask-script
 gunicorn
 raven
