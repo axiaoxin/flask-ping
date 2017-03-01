@@ -3,7 +3,6 @@
 import os
 import logging
 
-from extensions import sentry
 from settings import DEFAULT_LOG_FILE
 
 
@@ -58,5 +57,8 @@ def warning(msg, *args, **kwargs):
 
 
 def error(msg, *args, **kwargs):
+    error_logger.error(msg, *args, **kwargs)
+
+
+def exception(msg, *args, **kwargs):
     error_logger.exception(msg, *args, **kwargs)
-    sentry.captureException()
