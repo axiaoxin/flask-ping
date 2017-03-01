@@ -1,8 +1,5 @@
 from flask_script import Manager
-from extensions import app, db
-from models import *  # noqa
-
-
+from extensions import app
 manager = Manager(app)
 
 
