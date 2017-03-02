@@ -1,4 +1,4 @@
-/data/log/flask-ping/*.log {
+/data/log/flask-skeleton/*.log {
     daily
     rotate 30
     sharedscripts

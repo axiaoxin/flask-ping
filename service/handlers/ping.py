@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from models.demo import Demo
+from models.ping import Demo
 from utils.base import get_serializable_model_dict
 
 

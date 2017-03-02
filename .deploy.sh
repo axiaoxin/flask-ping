@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-proj_name=flask-ping
+proj_name=flask-skeleton
 proj_root_path=/srv/$proj_name
 proj_path=$proj_root_path/service
 venv_path=/srv/.$proj_name-venv

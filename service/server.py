@@ -25,12 +25,7 @@ def server_error(error):
 
 @app.route('/')
 def hello_world():
-    path = os.path.join(os.path.dirname(
-        os.path.dirname(os.path.realpath(__file__))), '.packtime')
-    if not os.path.exists(path):
-        return 'hello!'
-    with open(path) as packtime:
-        return packtime.read()
+    return response(data='Hello!')
 
 
 app.register_blueprint(ping, url_prefix='/ping')
