@@ -34,7 +34,7 @@ When you develop your api, you just need to focus in service directory. There ha
 
 
 
-### Plan：
+### Conventions：
 
 1. Add new code must be readable for humans, code must pass the PEP8 checking, the files must be with utf8 encoding and without bomb header, use less try...except...
 
@@ -42,11 +42,11 @@ When you develop your api, you just need to focus in service directory. There ha
 
 3. Put all business logic code in handlers directory, all of module's function in the handlers will auto add a decorator for log the function call detail, if you dont want to auto be added this decorator, you can add a `__nodeco__` attribute on the function.
 
-4. Put all the defined model in models directory. Models default use MySQL connection, you can add new db connection in `modules.__ini__`. The connection generate by peewee's `connect()` way which read db_url from .env. (If you want PooledMySQLDataBase support RetryExceptionError, just set the db_url's scheme with `mysql+pool+retry`
+4. Put all the defined model in models directory. Models default use MySQL connection, you can add new db connection in `modules.__init__`. The connection generate by peewee's `connect()` way which read db_url from .env. (If you want PooledMySQLDataBase support RetryExceptionError, just set the db_url's scheme with `mysql+pool+retry`
 
 5. Implement a function using the same name for route, handler and model, it let the code clean and tidy。
 
-6. Use the log.py to log, it save log to diffrent file by DEFAULT_LOG_FILE, The error and normal log will be separated. And if log an Exception instance by error() or exception(), the log will send to sentry(if you set a sentry dns)
+6. Use the log.py to log, it save log to diffrent file by different level in LOG_PATH. And if log an Exception instance by warning(), error(), critical(), exception(), the log will send to sentry(if you set a sentry dns)
 
 7. if not everyone has privileges to create table directly by model, so everytime you update db, must add the sql to schema.sql
 

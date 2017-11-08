@@ -1,5 +1,8 @@
 # -*- coding:utf-8 -*-
+import os
+
 from decouple import config
+
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
@@ -7,8 +10,9 @@ API_URL = config('API_URL', default='http://localhost:5000')
 
 SENTRY_DSN = config('SENTRY_DSN', default=None)
 
-DEFAULT_LOG_FILE = config(
-    "DEFAULT_LOG_FILE", default='/tmp/app.log')
+LOG_PATH = config("LOG_PATH", default='/tmp/')
+if not os.path.exists(LOG_PATH):
+    os.makedirs(LOG_PATH)
 
 JSON_AS_ASCII = False
 
