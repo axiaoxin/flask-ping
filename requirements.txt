@@ -1,6 +1,7 @@
 flask
 peewee
 pymysql
+blinker
 gevent
 python-decouple
 gunicorn
