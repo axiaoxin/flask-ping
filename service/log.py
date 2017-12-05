@@ -65,7 +65,7 @@ def _init_logger(logfile_name=__name__, log_path=LOG_PATH):
     logger = logging.getLogger('werkzeug')
     logger.setLevel(logging.DEBUG)
     for log_level, log_file in log_files.items():
-        file_handler = logging.handlers.TimedRotatingFileHandler(log_file, 'midnight')  # noqa
+        file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(log_level)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
