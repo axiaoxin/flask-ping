@@ -6,3 +6,5 @@ gevent
 python-decouple
 gunicorn
 raven
+redis
+celery
