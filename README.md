@@ -1,4 +1,4 @@
-﻿flask-skeleton
+flask-skeleton
 --------------
 
 flask-skeleton is a skeleton for using flask to develop apis service.

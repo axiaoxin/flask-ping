@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # *- coding: utf-8 -*-
 import json
 
@@ -15,10 +15,10 @@ class ResponseCode(object):
 
 
 ResponseCodeMsg = {
-    ResponseCode.SUCCESS: u'请求成功',
-    ResponseCode.FAIL: u'请求失败',
-    ResponseCode.BAD_REQUEST: u'请求参数错误',
-    ResponseCode.API_NOT_FOUND: u'API不存在',
+    ResponseCode.SUCCESS: u'Succuss',
+    ResponseCode.FAIL: u'Fail',
+    ResponseCode.BAD_REQUEST: u'Bad Request',
+    ResponseCode.API_NOT_FOUND: u'Entry Not Found',
     ResponseCode.SERVER_ERROR: u'Internal Server Error',
 }
 
@@ -32,13 +32,23 @@ def jsonify_(data):
 
 
 def response(code=ResponseCode.SUCCESS, msg=None, data=None):
-    result = {'code': code}
+    result = {'code': code, 'data': data}
     if msg:
         result['msg'] = msg
     else:
-        result['msg'] = ResponseCodeMsg[code]
-
-    if data is not None:
-        result['data'] = data
+        result['msg'] = ResponseCodeMsg.get(code, '')
 
     return jsonify_(result)
+
+
+def keyerror_response(func):
+    @wraps(func)
+    def wrap(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except KeyError as e:
+            data = u'Need params:{0}'.format(e)
+            log.warning(data)
+            return response(code=ResponseCode.BAD_REQUEST, data=data)
+
+    return wrap

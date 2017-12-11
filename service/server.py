@@ -1,11 +1,11 @@
-﻿# !/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding:utf-8 -*-
 import os
 
 from flask import g
 
-from response import response, ResponseCode
-from routes.ping import ping
+from utils.response import response, ResponseCode
+from blueprints.demo import demo_bp
 from extensions import app, sentry
 
 
@@ -28,8 +28,7 @@ def hello_world():
     return response(data='Hello!')
 
 
-app.register_blueprint(ping, url_prefix='/ping')
-
+app.register_blueprint(demo_bp, url_prefix='/demo')
 
 if __name__ == '__main__':
     app.run()

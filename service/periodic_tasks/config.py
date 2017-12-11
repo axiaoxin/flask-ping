@@ -14,11 +14,11 @@ beat_schedule = {
     'print-arg-every-1-seconds': {
         'task': 'tasks.print_tasks.print_arg',
         'schedule': 1,
-        'args': ('hello',)
+        'args': ('hello', )
     },
     'print-args-every-1-minutes': {
         'task': 'tasks.print_tasks.print_args',
         'schedule': crontab(minute='*/1'),
-        'args': ('world',)
+        'args': ('world', )
     },
 }
