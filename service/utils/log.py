@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import gevent
+from gevent.monkey import patch_all
+patch_all()  # noqa
+
+import time
 import os
+import inspect
 import logging
 import logging.handlers
 import sys
 from logging import raiseExceptions
 from logging import Logger
+from functools import wraps
 
 from extensions import sentry
-from settings import LOG_PATH
+import settings
 
 
 class AppLogger(Logger):
-
     def __init__(self, name, level=logging.NOTSET):
         super(AppLogger, self).__init__(name, level)
 
@@ -41,26 +47,28 @@ class AppLogger(Logger):
                 c = None  # break out
             else:
                 c = c.parent
-        if (found == 0) and raiseExceptions and not self.manager.emittedNoHandlerWarning:  # noqa
+        if (
+                found == 0
+        ) and raiseExceptions and not self.manager.emittedNoHandlerWarning:  # noqa
             sys.stderr.write("No handlers could be found for logger"
                              " \"%s\"\n" % self.name)
             self.manager.emittedNoHandlerWarning = 1
 
 
-def _init_logger(logfile_name=__name__, log_path=LOG_PATH):
+def _init_logger(logfile_name=__name__, log_path=settings.LOG_PATH):
     '''save log to diffrent file by deffirent log level into the log path
     and print all log in console'''
     logging.setLoggerClass(AppLogger)
     formatter = logging.Formatter(
-        '%(asctime)s %(name)s %(levelname)s %(message)s',
-        '%Y-%m-%d %H:%M:%S')
+        '%(asctime)s %(name)s %(levelname)s %(message)s', '%Y-%m-%d %H:%M:%S')
 
     log_files = {
         logging.DEBUG: os.path.join(log_path, logfile_name + '-debug.log'),
         logging.INFO: os.path.join(log_path, logfile_name + '-info.log'),
         logging.WARNING: os.path.join(log_path, logfile_name + '-warning.log'),
         logging.ERROR: os.path.join(log_path, logfile_name + '-error.log'),
-        logging.CRITICAL: os.path.join(log_path, logfile_name + '-critical.log')  # noqa
+        logging.CRITICAL:
+        os.path.join(log_path, logfile_name + '-critical.log')  # noqa
     }
     logger = logging.getLogger('werkzeug')
     logger.setLevel(logging.DEBUG)
@@ -78,7 +86,7 @@ def _init_logger(logfile_name=__name__, log_path=LOG_PATH):
     return logger
 
 
-logger = _init_logger()
+logger = _init_logger(settings.SERVICE_NAME)
 
 
 def debug(msg, *args, **kwargs):
@@ -111,3 +119,47 @@ def exception(msg, *args, **kwargs):
     logger.exception(msg, *args, **kwargs)
     if isinstance(msg, Exception):
         sentry.captureException()
+
+
+def get_func_name(func, full=True):
+    if full:
+        return '{}.{}'.format(inspect.getmodule(func).__name__, func.__name__)
+    else:
+        return func.__name__
+
+
+def _log_func_call(func, use_time, *func_args, **func_kwargs):
+    arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
+    args = func_args[:len(arg_names)]
+    defaults = func.func_defaults or ()
+    args = args + defaults[len(defaults) - (func.func_code.co_argcount - len(
+        args)):]
+    params = zip(arg_names, args)
+    args = func_args[len(arg_names):]
+    if args:
+        params.append(('args', args))
+    if func_kwargs:
+        params.append(('kwargs', func_kwargs))
+    func_name = get_func_name(func)
+    func_call = u'{func_name}({params}) {use_time}ms'.format(
+        func_name=func_name,
+        params=', '.join('%s=%r' % p for p in params),
+        use_time=use_time * 1000)
+    info(func_call)
+
+
+def log_func_call(func):
+    '''Decorator to log function call'''
+
+    @wraps(func)
+    def wrapper(*func_args, **func_kwargs):
+        if settings.LOG_FUNC_CALL:
+            start_time = time.time()
+            data = func(*func_args, **func_kwargs)
+            use_time = time.time() - start_time
+            gevent.spawn(_log_func_call, func, use_time, *func_args, **
+                         func_kwargs)
+            return data
+        return func(*func_args, **func_kwargs)
+
+    return wrapper

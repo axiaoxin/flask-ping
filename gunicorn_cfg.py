@@ -1,4 +1,4 @@
-﻿from multiprocessing import cpu_count
+from multiprocessing import cpu_count
 
 proc_name = 'flask-skeleton'
 bind = '127.0.0.1:5000'

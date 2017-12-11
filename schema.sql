@@ -1,4 +1,6 @@
 -- 新建demo表
+CREATE DATABASE IF NOT EXISTS db_demo;
+USE db_demo;
 
 CREATE TABLE `tb_demo` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '主键id',
