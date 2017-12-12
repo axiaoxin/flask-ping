@@ -6,7 +6,10 @@ http://chris-lamb.co.uk/2010/06/07/distributing-locking-python-and-redis/
 """
 import time
 import shelve
+import urlparse
+from functools import wraps
 
+from flask import request
 from redis import Redis
 
 from .core import Memoizer
@@ -74,3 +77,25 @@ def wrap(redis, lock_class=Lock):
 redis_client = Redis.from_url(settings.REDIS_URL)
 
 redis_memoize = Memoizer(wrap(redis_client))
+
+
+def cache_get_response(namespace='views', max_age=60):
+    def _cache(func):
+        @wraps(func)
+        def wrapper(*func_args, **func_kwargs):
+            if settings.CACHE_GET_RESPONSE and request.method == 'GET':
+                url = urlparse.urlsplit(request.url)
+                key = ':'.join(field for field in [url.path, url.query]
+                               if field)
+                return redis_memoize.get(
+                    str(key),
+                    func,
+                    func_args,
+                    func_kwargs,
+                    max_age=max_age,
+                    namespace=namespace)
+            return func(*func_args, **func_kwargs)
+
+        return wrapper
+
+    return _cache
