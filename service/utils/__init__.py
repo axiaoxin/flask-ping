@@ -5,7 +5,7 @@ import datetime
 import types
 import inspect
 import urlparse
-from functools import import wraps
+from functools import wraps
 
 from flask import request
 
