@@ -22,3 +22,4 @@ LOG_FUNC_CALL = config('LOG_FUNC_CALL', default=True, cast=bool)
 LOG_PEEWEE_SQL = config('LOG_PEEWEE_SQL', default=True, cast=bool)
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
+CACHE_GET_RESPONSE = config('CACHE_GET_RESPONSE', default=True, cast=bool)
