@@ -30,7 +30,7 @@ class Demo(MySQLBaseModel):
             else:
                 data = cls.select().order_by(+order_field)
         if serialized:
-            if isinstance(data, peewee.SelectQueryi):
+            if isinstance(data, peewee.SelectQuery):
                 data = [get_serializable_model_dict(i) for i in data]
             else:
                 data = get_serializable_model_dict(data)
