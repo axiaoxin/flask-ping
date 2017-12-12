@@ -3,17 +3,18 @@
 from flask import Blueprint
 
 import models
+import utils
 from utils import log
-from utils import register_decorator_for_module_funcs
 from . import handlers
 
 demo_bp = Blueprint('demo', __name__)
 
 decorators = [
     models.pw_auto_manage_connect(models.mysql_db),
+    utils.cache_get_response(),
     log.log_func_call
 ]
-register_decorator_for_module_funcs(handlers, decorators)
+utils.register_decorator_for_module_funcs(handlers, decorators)
 
 
 demo_bp.route('/items', methods=['GET', 'POST'])(handlers.items)

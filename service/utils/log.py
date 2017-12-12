@@ -1,4 +1,4 @@
-i#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import gevent
 from gevent.monkey import patch_all

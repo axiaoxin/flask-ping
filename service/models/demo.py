@@ -30,9 +30,10 @@ class Demo(MySQLBaseModel):
             else:
                 data = cls.select().order_by(+order_field)
         if serialized:
-            data = [get_serializable_model_dict(i) for i in data]
-        return data
-
+            if isinstance(data, list):
+                data = [get_serializable_model_dict(i) for i in data]
+            else:
+                data = get_serializable_model_dict(data)
         return data
 
     @classmethod
