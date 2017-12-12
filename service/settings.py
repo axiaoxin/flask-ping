@@ -19,5 +19,6 @@ LOG_PATH = config("LOG_PATH", default='/tmp/')
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)
 LOG_FUNC_CALL = config('LOG_FUNC_CALL', default=True, cast=bool)
+LOG_PEEWEE_SQL = config('LOG_PEEWEE_SQL', default=True, cast=bool)
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')

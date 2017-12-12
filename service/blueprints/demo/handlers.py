@@ -6,10 +6,17 @@ from utils import response
 
 def items(id=None):
     if request.method == 'GET' and id is None:
-        data = Demo.get_all_items()
+        order_by = request.values.get('order_by', 'id')
+        order_type = request.values.get('order_type', 'desc')
+        data = Demo.get_item(order_by=order_by, order_type=order_type)
     elif request.method == 'GET' and id is not None:
-        data = Demo.get_item_by_id(id)
-    else:
+        data = Demo.get_item(id)
+    elif request.method == 'POST':
         item = request.get_json()
         data = Demo.add_item(**item)
+    elif request.method == 'DELETE' and id is not None:
+        data = Demo.delete_item(id)
+    elif request.method == 'PUT':
+        item = request.get_json()
+        data = Demo.update_item(id, **item)
     return response.response(data=data)
