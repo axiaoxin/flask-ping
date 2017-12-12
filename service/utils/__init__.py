@@ -4,13 +4,8 @@ import time
 import datetime
 import types
 import inspect
-import urlparse
-from functools import wraps
-
-from flask import request
 
 import settings
-from memoize import redis_memoize
 
 
 def is_ipv4(ip):
@@ -57,25 +52,3 @@ def register_decorator_for_module_funcs(module, decorator):
                 for deco in decorator:
                     func = deco(func)
                     vars(m)[funcname] = func
-
-
-def cache_get_response(namespace='views', max_age=60):
-    def _cache(func):
-        @wraps(func)
-        def wrapper(*func_args, **func_kwargs):
-            if settings.CACHE_GET_RESPONSE and request.method == 'GET':
-                url = urlparse.urlsplit(request.url)
-                key = ':'.join(field for field in [url.path, url.query]
-                               if field)
-                return redis_memoize.get(
-                    str(key),
-                    func,
-                    func_args,
-                    func_kwargs,
-                    max_age=max_age,
-                    namespace=namespace)
-            return func(*func_args, **func_kwargs)
-
-        return wrapper
-
-    return _cache
