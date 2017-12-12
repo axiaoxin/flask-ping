@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+i#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import gevent
 from gevent.monkey import patch_all
@@ -55,7 +55,7 @@ class AppLogger(Logger):
             self.manager.emittedNoHandlerWarning = 1
 
 
-def _init_logger(logfile_name=__name__, log_path=settings.LOG_PATH):
+def init_logger(logger_name, logfile_name=__name__, logging_level=logging.DEBUG, log_path=settings.LOG_PATH):
     '''save log to diffrent file by deffirent log level into the log path
     and print all log in console'''
     logging.setLoggerClass(AppLogger)
@@ -70,8 +70,9 @@ def _init_logger(logfile_name=__name__, log_path=settings.LOG_PATH):
         logging.CRITICAL:
         os.path.join(log_path, logfile_name + '-critical.log')  # noqa
     }
-    logger = logging.getLogger('werkzeug')
-    logger.setLevel(logging.DEBUG)
+
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging_level)
     for log_level, log_file in log_files.items():
         file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(log_level)
@@ -85,8 +86,9 @@ def _init_logger(logfile_name=__name__, log_path=settings.LOG_PATH):
     logger.addHandler(console_handler)
     return logger
 
-
-logger = _init_logger(settings.SERVICE_NAME)
+logger = init_logger('werkzeug', settings.SERVICE_NAME)
+if settings.LOG_PEEWEE_SQL:
+    pw_logger = init_logger('peewee', settings.SERVICE_NAME)
 
 
 def debug(msg, *args, **kwargs):

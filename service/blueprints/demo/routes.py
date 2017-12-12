@@ -17,4 +17,4 @@ register_decorator_for_module_funcs(handlers, decorators)
 
 
 demo_bp.route('/items', methods=['GET', 'POST'])(handlers.items)
-demo_bp.route('/items/<int:id>', methods=['GET'])(handlers.items)
+demo_bp.route('/items/<int:id>', methods=['GET', 'DELETE', 'PUT'])(handlers.items)
