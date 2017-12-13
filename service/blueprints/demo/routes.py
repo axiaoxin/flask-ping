@@ -5,17 +5,17 @@ from flask import Blueprint
 import models
 import utils
 from utils import log
-from utils import memoize
+from utils import cache
 from . import handlers
 
 demo_bp = Blueprint('demo', __name__)
 
 decorators = [
     models.pw_auto_manage_connect(models.mysql_db),
-    memoize.cache_get_response(max_age=3),
+    cache.cached(),
     log.log_func_call
 ]
-utils.register_decorator_for_module_funcs(handlers, decorators)
+utils.register_decorators_on_module_funcs(handlers, decorators)
 
 
 demo_bp.route('/items', methods=['GET', 'POST'])(handlers.items)

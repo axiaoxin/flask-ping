@@ -47,7 +47,7 @@ def sa_session_scope(session, commit=False):
 
 
 def pw_auto_manage_connect(db=mysql_db):
-    def deco(func):
+    def pw_auto_manage_connect_deco(func):
         @wraps(func)
         def wrap(*args, **kwargs):
             try:
@@ -61,10 +61,10 @@ def pw_auto_manage_connect(db=mysql_db):
 
         return wrap
 
-    return deco
+    return pw_auto_manage_connect_deco
 
 
-def get_serializable_model_dict(model, pop=[], orm='peewee'):
+def model2dict(model, pop=[], orm='peewee'):
     if not model:
         return
 

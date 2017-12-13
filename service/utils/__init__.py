@@ -6,6 +6,7 @@ import types
 import inspect
 
 import settings
+import log
 
 
 def is_ipv4(ip):
@@ -30,7 +31,7 @@ def datetime2str(dt, str_format='%Y-%m-%d %H:%M:%S'):
     return dt.strftime(str_format)
 
 
-def register_decorator_for_module_funcs(module, decorator):
+def register_decorators_on_module_funcs(modules, decorators):
     '''将decorator自动注册到module中的所有函数
     函数中设置__nodeco__属性为False或者以下划线开头的名称
     则不自动注册任何装饰器
@@ -39,16 +40,20 @@ def register_decorator_for_module_funcs(module, decorator):
             pass
         func.__nodeco__ = True
     '''
-    if not isinstance(module, (list, tuple)):
-        module = [module]
-    if not isinstance(decorator, (list, tuple)):
-        decorator = [decorator]
-    for m in module:
+    if not isinstance(modules, (list, tuple)):
+        modules = [modules]
+    if not isinstance(decorators, (list, tuple)):
+        decorators = [decorators]
+    for m in modules:
         for funcname, func in vars(m).iteritems():
-            if (isinstance(func, types.FunctionType) and
-                    not funcname.startswith('_')):
+            if (isinstance(func, types.FunctionType)
+                    and not funcname.startswith('_')
+                    and func.__module__ == m.__name__):
                 if getattr(func, '__nodeco__', False):
                     continue
-                for deco in decorator:
+                for deco in decorators:
+                    if settings.DEBUG:
+                        log.debug('register %s on %s.%s'
+                                  % (deco.__name__, m.__name__, funcname))
                     func = deco(func)
                     vars(m)[funcname] = func

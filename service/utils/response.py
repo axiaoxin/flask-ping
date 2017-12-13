@@ -31,7 +31,7 @@ def jsonify_(data):
     return Response(js, mimetype='application/json')
 
 
-def response(code=ResponseCode.SUCCESS, msg=None, data=None):
+def response(data=None, code=ResponseCode.SUCCESS, msg=None):
     result = {'code': code, 'data': data}
     if msg:
         result['msg'] = msg
