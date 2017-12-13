@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from flask import request
 from models.demo import Demo
-from utils import response
+from utils.response import response
 
 def items(id=None):
     if request.method == 'GET' and id is None:
@@ -19,4 +19,4 @@ def items(id=None):
     elif request.method == 'PUT':
         item = request.get_json()
         data = Demo.update_item(id, **item)
-    return response.response(data=data)
+    return response(data)

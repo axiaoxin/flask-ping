@@ -6,7 +6,7 @@ import peewee
 
 from models import MySQLBaseModel
 from models import get_object_or_404
-from models import get_serializable_model_dict
+from models import model2dict
 
 
 class Demo(MySQLBaseModel):
@@ -20,7 +20,7 @@ class Demo(MySQLBaseModel):
         db_table = 'tb_demo'
 
     @classmethod
-    def get_item(cls, id=None, order_by='id', order_type='desc', serialized=True):
+    def get_item(cls, id=None, order_by='id', order_type='desc', to_dict=True):
         if id is not None:
             data = get_object_or_404(cls, cls.id == id)
         else:
@@ -29,18 +29,18 @@ class Demo(MySQLBaseModel):
                 data = cls.select().order_by(-order_field)
             else:
                 data = cls.select().order_by(+order_field)
-        if serialized:
+        if to_dict:
             if isinstance(data, peewee.SelectQuery):
-                data = [get_serializable_model_dict(i) for i in data]
+                data = [model2dict(i) for i in data]
             else:
-                data = get_serializable_model_dict(data)
+                data = model2dict(data)
         return data
 
     @classmethod
-    def add_item(cls, name, age, serialized=True):
+    def add_item(cls, name, age, to_dict=True):
         data = cls.create(name=name, age=age)
-        if serialized:
-            data = get_serializable_model_dict(data)
+        if to_dict:
+            data = model2dict(data)
         return data
 
     @classmethod
@@ -54,7 +54,7 @@ class Demo(MySQLBaseModel):
         return data
 
     @classmethod
-    def update_item(cls, id, name=None, age=None, is_deleted=None, serialized=True):
+    def update_item(cls, id, name=None, age=None, is_deleted=None, to_dict=True):
         data = get_object_or_404(cls, cls.id == id)
         if name:
             data.name = name
@@ -63,6 +63,6 @@ class Demo(MySQLBaseModel):
         if is_deleted:
             data.is_deleted = is_deleted
         data.save()
-        if serialized:
-            data = get_serializable_model_dict(data)
+        if to_dict:
+            data = model2dict(data)
         return data
