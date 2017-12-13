@@ -3,6 +3,8 @@
 from flask import request
 from models.demo import Demo
 from utils.response import response
+from utils.cache import cached
+
 
 def items(id=None):
     if request.method == 'GET' and id is None:
