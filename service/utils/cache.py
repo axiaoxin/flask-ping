@@ -25,7 +25,8 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='view
                 key = ':'.join(field for field in [namespace, key_prefix, url.path, url.query]
                                if field)
             elif namespace == 'funcs':
-                key = ':'.join(field for field in [namespace, key_prefix, func.__name__, str(func_args), str(func_kwargs)])      
+                key = ':'.join(field for field in [namespace, key_prefix, func.__name__,
+                               str(func_args), str(func_kwargs)] if field)
 
             data = redis_client.get(key)
             if data is None:
