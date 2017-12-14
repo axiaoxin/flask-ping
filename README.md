@@ -72,7 +72,7 @@ demo示例采用MySQL作存储，查看demo示例请先确认`settings.py`中数
 ##### 查
 
     curl -X GET \
-   LOG_FUNC_CALL   'http://localhost:5000/demo/items?order_by=age&order_type=asc'
+      'http://localhost:5000/demo/items?order_by=age&order_type=asc'
 
 ##### 改
 
