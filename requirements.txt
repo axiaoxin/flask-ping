@@ -8,3 +8,4 @@ gunicorn
 raven
 redis
 celery
+cerberus

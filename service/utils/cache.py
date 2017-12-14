@@ -20,10 +20,13 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='view
             if not settings.CACHED_CALL:
                 return func(*func_args, **func_kwargs)
 
-            if namespace == 'views' and request.method == 'GET':
-                url = urlparse.urlsplit(request.url)
-                key = ':'.join(field for field in [namespace, key_prefix, url.path, url.query]
-                               if field)
+            if namespace == 'views':
+                if request.method == 'GET':
+                    url = urlparse.urlsplit(request.url)
+                    key = ':'.join(field for field in [namespace, key_prefix, url.path, url.query]
+                                   if field)
+                else:
+                    return func(*func_args, **func_kwargs)
             elif namespace == 'funcs':
                 key = ':'.join(field for field in [namespace, key_prefix, func.__name__,
                                str(func_args), str(func_kwargs)] if field)
