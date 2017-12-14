@@ -9,16 +9,16 @@ from settings import DEBUG
 class ResponseCode(object):
     SUCCESS = 0
     FAIL = -1
-    BAD_REQUEST = 400
-    API_NOT_FOUND = 404
+    PARAMS_ERROR = 400
+    ENTRY_NOT_FOUND = 404
     SERVER_ERROR = 500
 
 
 ResponseCodeMsg = {
     ResponseCode.SUCCESS: u'Succuss',
     ResponseCode.FAIL: u'Fail',
-    ResponseCode.BAD_REQUEST: u'Bad Request',
-    ResponseCode.API_NOT_FOUND: u'Entry Not Found',
+    ResponseCode.PARAMS_ERROR: u'Params Error',
+    ResponseCode.ENTRY_NOT_FOUND: u'Entry Not Found',
     ResponseCode.SERVER_ERROR: u'Internal Server Error',
 }
 
