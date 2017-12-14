@@ -12,7 +12,7 @@ SERVICE_NAME = config('SERVICE_NAME', default='flask-skeleton')
 API_URL = config('API_URL', default='http://localhost:5000')
 DB_URL = config(
     'DB_URL',
-    default=('mysql+pool+retry://root:root@localhost:3306/db_demo'
+    default=('mysql+pool+retry://root:root@localhost:3306/test'
              '?max_connections=40&stale_timeout=300&charset=utf8mb4'))
 SENTRY_DSN = config('SENTRY_DSN', default=None)
 
