@@ -3,7 +3,9 @@
 import json
 
 from flask import Response
-from settings import DEBUG
+import settings
+import stringcase
+import log
 
 
 class ResponseCode(object):
@@ -23,8 +25,31 @@ ResponseCodeMsg = {
 }
 
 
+def keycase_convert(obj, func):
+    if isinstance(obj, dict):
+        return {func(k): keycase_convert(v, func) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [keycase_convert(elem, func) for elem in obj]
+    else:
+        return obj
+
+
+def get_support_keycase():
+    return [i for i in dir(stringcase)
+            if i.endswith('case')]
+
+
 def jsonify_(data):
-    if DEBUG:
+    keycase = settings.JSON_KEYCASE
+    if keycase:
+        try:
+            casefunc = getattr(stringcase, keycase)
+            data = keycase_convert(data, casefunc)
+        except AttributeError:
+            log.warning(u'%s keycase is not supported, response default json. '
+                        u'Supported keycase: %s'
+                        % (keycase, get_support_keycase()))
+    if settings.DEBUG:
         js = json.dumps(data, ensure_ascii=False, indent=4)
     else:
         js = json.dumps(data, ensure_ascii=False, separators=[',', ':'])

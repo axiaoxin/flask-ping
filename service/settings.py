@@ -6,6 +6,7 @@ from decouple import config
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 JSON_AS_ASCII = config('JSON_AS_ASCII', default=False, cast=bool)
+JSON_KEYCASE = config('JSON_KEYCASE', default=None)
 
 SERVICE_NAME = config('SERVICE_NAME', default='flask-skeleton')
 API_URL = config('API_URL', default='http://localhost:5000')
@@ -23,5 +24,5 @@ LOG_PEEWEE_SQL = config('LOG_PEEWEE_SQL', default=False, cast=bool)
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CACHED_CALL = config('CACHED_CALL', default=True, cast=bool)
-CACHED_OVER_EXEC_MILLISECONDS = config('CACHED_OVER_EXEC_MILLISECONDS', default=1, cast=int)
+CACHED_OVER_EXEC_MILLISECONDS = config('CACHED_OVER_EXEC_MILLISECONDS', default=800, cast=int)
 CACHED_EXPIRE_SECONDS = config('CACHED_EXPIRE_SECONDS', default=60, cast=int)
