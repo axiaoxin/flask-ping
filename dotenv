@@ -1,6 +1,0 @@
-DEBUG=True
-
-LOG_PATH=/tmp/
-
-#http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#db-url
-DB_URL=mysql+pool+retry://root:root@localhost:3306/test?max_connections=40&stale_timeout=300&charset=utf8mb4

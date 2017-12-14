@@ -1,2 +1,0 @@
-PYTHONPATH=/srv/flask-skeleton/service
-*/1 * * * * /srv/.venv/bin/python /srv/flask-skeleton/service/cronscripts/demo.py >> /data/log/flask-skeleton/crontab.log 2>&1
