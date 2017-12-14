@@ -1,63 +1,48 @@
 flask-skeleton
 --------------
 
-flask-skeleton is a skeleton for using flask to develop apis service.
-When you start a new flask api service, you can just clone it then develop base on it,
-maybe there need you to modify some pathname settings.
-
-You are not nessasary to care for the outermost layer's files, they are config files or scripts for deploying on my innernetwork server.
-When you develop your api, you just need to focus in service directory. There has a ping demo, you can delete it.
+每开始一个Flask项目总是要重复做一些代码结构上的规划和写一些相同的代码，
+flask-skeleton的目的是想把这些重复的事情都先统一做成脚手架，
+在以后的API服务开发过程中只需clone下来就可以直接开始写业务代码。
 
 
+#### flask-skeleton代码结构
 
-### Features
-
-- use [peewee](http://docs.peewee-orm.com/en/latest/) to ORM.
-
-- use [python-decouple](https://github.com/henriquebastos/python-decouple/) to read environment variables settings.
-
-- support [Sentry](https://docs.sentry.io/)
-
-- detailed log
-
-
-
-### Run
-
-1. Create and activate a virtualenv
-
-2. Install the requirements
-
-3. create the .env file for decouple, the common envvars are in dotenv file, you need to write these vars in .env file, then use decouple to read them in settings.py uniformly.
-
-4. run `python server.py`
-
-
-
-### Conventions：
-
-1. Add new code must be readable for humans, code must pass the PEP8 checking, the files must be with utf8 encoding and without bomb header, use less try...except...
-
-2. Put all the blueprint-routes under the routes directory, code in routes need as possible as simple, the business logic code don't write at here. If the route will connect database, must add the `pw_auto_manage_connect` decorator on it to make db connection be closed.
-
-3. Put all business logic code in handlers directory, all of module's function in the handlers will auto add a decorator for log the function call detail, if you dont want to auto be added this decorator, you can add a `__nodeco__` attribute on the function.
-
-4. Put all the defined model in models directory. Models default use MySQL connection, you can add new db connection in `modules.__init__`. The connection generate by peewee's `connect()` way which read db_url from .env. (If you want PooledMySQLDataBase support RetryExceptionError, just set the db_url's scheme with `mysql+pool+retry`
-
-5. Implement a function using the same name for route, handler and model, it let the code clean and tidy。
-
-6. Use the log.py to log, it save log to diffrent file by different level in LOG_PATH. And if log an Exception instance by warning(), error(), critical(), exception(), the log will send to sentry(if you set a sentry dns)
-
-7. if not everyone has privileges to create table directly by model, so everytime you update db, must add the sql to schema.sql
-
-
-### TODO：
-
-- support statsd
-- add unittest demo
-- add flask-script
-
------
-
-- add feature arg when deploy
-- rollback by feature arg
+    flask-skeleton
+    ├── app                                                 服务代码根目录
+    │   ├── blueprints                                      业务逻辑统一存放位置（以蓝图方式按业务创建目录来组织代码）
+    │   │   ├── demo                                        一个demo示例（增删改查）
+    │   │   │   ├── handlers.py                             视图业务处理逻辑
+    │   │   │   ├── __init__.py
+    │   │   │   ├── routes.py                               视图url路由逻辑
+    │   │   │   └── validator_schemas.py                    参数验证schema
+    │   │   └── __init__.py
+    │   ├── extensions.py                                   app拓展统一存放位置
+    │   ├── __init__.py
+    │   ├── models                                          ORM模型
+    │   │   ├── demo.py                                     一个demo示例（增删改查）
+    │   │   └── __init__.py
+    │   ├── periodic_tasks                                  定时任务统一存放位置
+    │   │   ├── app.py                                      Celery主程序
+    │   │   ├── config.py                                   Celery beat配置
+    │   │   ├── readme.md
+    │   │   └── tasks                                       Celery 任务统一存放位置
+    │   │       ├── __init__.py
+    │   │       └── print_tasks.py                          一个定时执行print的示例
+    │   ├── server.py                                       flask app server（在这里统一注册蓝图）
+    │   ├── settings.py                                     配置变量统一存放位置（通过.env文件可以改变默认配置）
+    │   └── utils                                           工具类函数统一存放位置
+    │       ├── cache.py                                    缓存工具（redis）
+    │       ├── __init__.py                                 基础或不好分类的工具
+    │       ├── log.py                                      日志工具
+    │       ├── response.py                                 返回处理工具
+    │       └── stringcase.py                               字符串风格转换（被response.py使用，不要修改或添加代码）
+    ├── deploy                                              部署配置文件示例
+    │   ├── gunicorn_cfg.py                                 gunicorn配置
+    │   ├── logrotate                                       日志rorate配置
+    │   ├── nginx.conf                                      nginx配置
+    │   ├── sqls                                            数据库变更增量sql统一存放位置
+    │   │   └── v0.0.0_demo.sql                             demo示例的sql（命名风格按flyway规范）
+    │   └── supervisor.conf                                 supervisor配置
+    ├── README.md                                           :)
+    └── requirements.txt                                    依赖库列表
