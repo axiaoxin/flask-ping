@@ -89,17 +89,22 @@ demo示例采用MySQL作存储，查看demo示例请先确认`settings.py`中数
 
 #### 编写API时可参考demo中的用法
 
+0. 修改配置
+
+默认会使用`settings.py`中的配置，新增配置按照[decouple](https://github.com/henriquebastos/python-decouple)写法。
+修改默认配置不必修改代码，在`app`根目录创建一个`.env`文件，写上修改后的配置即可。
+
 1. 装饰器
 
-在demo的routes.py中会为handlers.py中的函数注册装饰器，这些装饰器不是必须的，
+在demo的`routes.py`中会为`handlers.py`中的函数注册装饰器，这些装饰器不是必须的，
 但是在使用时需要注意其注册顺序，按列表顺序注册，先注册的先执行。
 
 使用`register_decorators_on_module_funcs`方法可以自动为一个模块文件中的方法注册装饰器
 
-pw_auto_manage_connect: 确保在使用peewee时都先connect，最后close。如果想查看实际执行的sql可以修改`settings.py`中的`LOG_PEEWEE_SQL=True`
+`pw_auto_manage_connect`: 确保在使用peewee时都先connect，最后close。如果想查看实际执行的sql可以修改`settings.py`中的`LOG_PEEWEE_SQL=True`
 
-cached: 根据settings中的配置缓存GET请求的结果，如果不想使用自动缓存功能可以修改`settings.py`中的`CACHED_CALL=False`
-log_func_call: 记录发生调用的函数名、参数、执行时间，如果不想记录到日志可以修改`settings.py`中的`LOG_FUNC_CALL=False`
+`cached`: 根据settings中的配置缓存GET请求的结果，如果不想使用自动缓存功能可以修改`settings.py`中的`CACHED_CALL=False`
+`log_func_call`: 记录发生调用的函数名、参数、执行时间，如果不想记录到日志可以修改`settings.py`中的`LOG_FUNC_CALL=False`
 
 cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的执行时间大于`CACHED_OVER_EXEC_MILLISECONDS`毫秒时，
 会缓存GET请求返回的结果，下次同样的GET请求到来时使用缓存返回结果，缓存过期时间为`CACHED_EXPIRE_SECONDS`秒。
@@ -143,3 +148,8 @@ cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的�
     uppercase('FooBarBaz') # => "FOOBARBAZ"
     alphanumcase('_Foo., Bar') # =>'FooBar'
     alphanumcase('Foo_123 Bar!') # =>'Foo123Bar'
+
+4. JSON参数验证
+
+使用[cerberus](https://github.com/pyeve/cerberus)进行json参数验证，
+所有验证的`validator_schemas`统一存放在对应的蓝图目录下。
