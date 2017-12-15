@@ -11,7 +11,7 @@ flask-skeleton的目的是想把这些重复的事情都先统一做成脚手架
 ## flask-skeleton代码结构
 
     flask-skeleton
-    ├── app                                                 服务代码根目录
+    ├── webapp                                              服务代码根目录
     │   ├── blueprints                                      业务逻辑统一存放位置（以蓝图方式按业务创建目录来组织代码）
     │   │   ├── demo                                        一个demo示例（增删改查）
     │   │   │   ├── handlers.py                             视图业务处理逻辑
