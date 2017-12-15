@@ -153,3 +153,17 @@ cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的�
 
 使用[cerberus](https://github.com/pyeve/cerberus)进行json参数验证，
 所有验证的`validator_schemas`统一存放在对应的蓝图目录下。
+
+
+#### TODO:
+
+- utils
+    - 增加异常retry
+    - 增加分布式锁
+    - statsd
+    - 外部api请求
+- 更新deploy目录的内容
+- 文档
+- tests
+    - unittest
+    - benchmark
