@@ -8,9 +8,11 @@ from redis import Redis
 import cPickle
 
 import settings
+import redlock
 
 
 redis_client = Redis.from_url(settings.REDIS_URL)
+redis_lock = redlock.Redlock(redis_client, retry_count=settings.EXCEPTION_RETRY_COUNT)
 
 
 def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='views'):
