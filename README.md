@@ -156,7 +156,7 @@ cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的�
 ## TODO:
 
 - utils
-    - 增加异常retry
+    - [x]增加异常retry
     - 增加分布式锁
     - statsd
     - 外部api请求
