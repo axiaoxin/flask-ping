@@ -8,7 +8,7 @@ flask-skeleton的目的是想把这些重复的事情都先统一做成脚手架
 **项目仍在开发阶段，并未经过生产环境检验，请谨慎使用！**
 
 
-#### flask-skeleton代码结构
+## flask-skeleton代码结构
 
     flask-skeleton
     ├── app                                                 服务代码根目录
@@ -50,14 +50,14 @@ flask-skeleton的目的是想把这些重复的事情都先统一做成脚手架
     └── requirements.txt                                    依赖库列表
 
 
-#### 运行
+## 运行
 
 建议使用virtualenv创建虚拟环境。
 
     pip install -r requirements.txt
     python server.py
 
-#### Demo
+## Demo
 
 demo示例采用MySQL作存储，查看demo示例请先确认`settings.py`中数据库配置`DB_URL`是你当前环境的配置，
 导入demo示例的sql文件`v0.0.0_demo.sql`后即可调用接口。
@@ -86,8 +86,6 @@ demo示例采用MySQL作存储，查看demo示例请先确认`settings.py`中数
     curl -X DELETE \
       http://localhost:5000/demo/items/1
 
-
-#### 编写API时可参考demo中的用法
 
 **修改配置**
 
@@ -155,7 +153,7 @@ cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的�
 所有验证的`validator_schemas`统一存放在对应的蓝图目录下。
 
 
-#### TODO:
+## TODO:
 
 - utils
     - 增加异常retry
