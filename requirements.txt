@@ -9,3 +9,4 @@ raven
 redis
 celery
 cerberus
+requests
