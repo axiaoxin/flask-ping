@@ -1,18 +1,17 @@
 # coding:utf-8
 import time
 import urlparse
+import cPickle
+from contextlib import contextmanager
 from functools import wraps
 
 from flask import request, Response
 from redis import Redis
-import cPickle
 
 import settings
-import redlock
 
 
 redis_client = Redis.from_url(settings.REDIS_URL)
-redis_lock = redlock.Redlock(redis_client, retry_count=settings.EXCEPTION_RETRY_COUNT)
 
 
 def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='views'):
@@ -45,3 +44,13 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='view
         return wrapper
 
     return cached_deco
+
+
+@contextmanager
+def lock(name, timeout=None, blocking=False, blocking_timeout=None):
+    try:
+        redis_lock = redis_client.lock(name=name, timeout=timeout)
+        redis_lock.acquire(blocking=blocking, blocking_timeout=blocking_timeout)
+        yield redis_lock
+    finally:
+        redis_lock.release()
