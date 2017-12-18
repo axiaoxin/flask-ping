@@ -47,10 +47,10 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, key_prefix='', namespace='view
 
 
 @contextmanager
-def lock(name, timeout=None, blocking=False, blocking_timeout=None):
+def distlock(name, timeout=None, blocking=False, blocking_timeout=None):
     try:
-        redis_lock = redis_client.lock(name=name, timeout=timeout)
-        redis_lock.acquire(blocking=blocking, blocking_timeout=blocking_timeout)
-        yield redis_lock
+        lock = redis_client.lock(name='distlock:' + name, timeout=timeout)
+        lock.acquire(blocking=blocking, blocking_timeout=blocking_timeout)
+        yield lock
     finally:
-        redis_lock.release()
+        lock.release()
