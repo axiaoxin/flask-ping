@@ -157,7 +157,6 @@ cached装饰器在`settings.py`中的`CACHED_CALL=True`且被装饰的函数的�
 
 - utils
     - statsd
-    - 外部api请求
 - 更新deploy目录的内容
 - 文档
 - tests
