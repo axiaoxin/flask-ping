@@ -4,7 +4,6 @@ from flask import request
 from models.demo import Demo
 from utils.response import response
 from utils.response import ResponseCode
-from utils.cache import cached
 from blueprints import validator
 from . import validator_schemas
 

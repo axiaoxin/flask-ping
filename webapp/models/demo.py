@@ -54,7 +54,8 @@ class Demo(MySQLBaseModel):
         return data
 
     @classmethod
-    def update_item(cls, id, name=None, age=None, is_deleted=None, to_dict=True):
+    def update_item(cls, id, name=None, age=None,
+                    is_deleted=None, to_dict=True):
         data = get_object_or_404(cls, cls.id == id)
         if name:
             data.name = name

@@ -40,7 +40,7 @@ def sa_session_scope(session, commit=False):
             session.commit()
     except Exception as e:
         session.rollback()
-        log.error(e)
+        utils.log.error(e)
         raise
     finally:
         session.close()

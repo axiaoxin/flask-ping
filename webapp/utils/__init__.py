@@ -4,6 +4,7 @@ import time
 import datetime
 import types
 import inspect
+import re
 
 import settings
 import log
@@ -57,3 +58,23 @@ def register_decorators_on_module_funcs(modules, decorators):
                                   % (deco.__name__, m.__name__, funcname))
                     func = deco(func)
                     vars(m)[funcname] = func
+
+
+def get_func_name(func, full=True):
+    if full:
+        return '{}.{}'.format(inspect.getmodule(func).__name__, func.__name__)
+    else:
+        return func.__name__
+
+
+def to_curl(request):
+    headers = ["'{0}: {1}'".format(k, v) for k, v in request.headers.items()]
+    headers = " -H ".join(sorted(headers))
+
+    command = "curl -X {method} -H {headers} -d '{data}' '{uri}'".format(
+        data=request.body or "",
+        headers=headers,
+        method=request.method,
+        uri=request.url,
+    )
+    return command

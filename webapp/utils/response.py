@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # *- coding: utf-8 -*-
 import json
+from functools import wraps
 
 from flask import Response
 import settings

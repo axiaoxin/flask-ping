@@ -6,9 +6,7 @@ patch_all()  # noqa
 
 import time
 import os
-import inspect
 import logging
-import logging.handlers
 import sys
 from logging import raiseExceptions
 from logging import Logger
@@ -16,6 +14,7 @@ from functools import wraps
 
 from extensions import sentry
 import settings
+import utils
 
 
 class AppLogger(Logger):
@@ -55,7 +54,10 @@ class AppLogger(Logger):
             self.manager.emittedNoHandlerWarning = 1
 
 
-def init_logger(logger_name, logfile_name=__name__, logging_level=logging.DEBUG, log_path=settings.LOG_PATH):
+def init_logger(logger_name,
+                logfile_name=__name__,
+                logging_level=logging.DEBUG,
+                log_path=settings.LOG_PATH):
     '''save log to diffrent file by deffirent log level into the log path
     and print all log in console'''
     logging.setLoggerClass(AppLogger)
@@ -85,6 +87,7 @@ def init_logger(logger_name, logfile_name=__name__, logging_level=logging.DEBUG,
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     return logger
+
 
 logger = init_logger('werkzeug', settings.SERVICE_NAME)
 if settings.LOG_PEEWEE_SQL:
@@ -123,13 +126,6 @@ def exception(msg, *args, **kwargs):
         sentry.captureException()
 
 
-def get_func_name(func, full=True):
-    if full:
-        return '{}.{}'.format(inspect.getmodule(func).__name__, func.__name__)
-    else:
-        return func.__name__
-
-
 def _log_func_call(func, use_time, *func_args, **func_kwargs):
     arg_names = func.func_code.co_varnames[:func.func_code.co_argcount]
     args = func_args[:len(arg_names)]
@@ -142,7 +138,7 @@ def _log_func_call(func, use_time, *func_args, **func_kwargs):
         params.append(('args', args))
     if func_kwargs:
         params.append(('kwargs', func_kwargs))
-    func_name = get_func_name(func)
+    func_name = utils.get_func_name(func)
     func_call = u'{func_name}({params}) {use_time}ms'.format(
         func_name=func_name,
         params=', '.join('%s=%r' % p for p in params),
@@ -159,22 +155,9 @@ def log_func_call(func):
             start_time = time.time()
             data = func(*func_args, **func_kwargs)
             use_time = time.time() - start_time
-            gevent.spawn(_log_func_call, func, use_time, *func_args, **
-                         func_kwargs)
+            gevent.spawn(_log_func_call, func, use_time, *func_args,
+                         **func_kwargs)
             return data
         return func(*func_args, **func_kwargs)
 
     return wrapper
-
-
-def to_curl(request):
-    headers = ["'{0}: {1}'".format(k, v) for k, v in request.headers.items()]
-    headers = " -H ".join(sorted(headers))
-
-    command = "curl -X {method} -H {headers} -d '{data}' '{uri}'".format(
-        data=request.body or "",
-        headers=headers,
-        method=request.method,
-        uri=request.url,
-    )
-    return command

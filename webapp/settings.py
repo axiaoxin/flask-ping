@@ -24,7 +24,9 @@ LOG_PEEWEE_SQL = config('LOG_PEEWEE_SQL', default=False, cast=bool)
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 CACHED_CALL = config('CACHED_CALL', default=True, cast=bool)
-CACHED_OVER_EXEC_MILLISECONDS = config('CACHED_OVER_EXEC_MILLISECONDS', default=800, cast=int)
+CACHED_OVER_EXEC_MILLISECONDS = config(
+    'CACHED_OVER_EXEC_MILLISECONDS', default=800, cast=int)
 CACHED_EXPIRE_SECONDS = config('CACHED_EXPIRE_SECONDS', default=60, cast=int)
-REDIS_LOCK_VALIDITY_MILLISECONDS = config('REDIS_LOCK_VALIDITY_MILLISECONDS', default=1000, cast=int)
+REDIS_LOCK_VALIDITY_MILLISECONDS = config(
+    'REDIS_LOCK_VALIDITY_MILLISECONDS', default=1000, cast=int)
 EXCEPTION_RETRY_COUNT = config('EXCEPTION_RETRY_COUNT', default=2, cast=int)

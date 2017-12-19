@@ -1,7 +1,5 @@
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-import os
-
 from flask import g
 
 from utils.response import response, ResponseCode
@@ -11,7 +9,7 @@ from extensions import app, sentry
 
 @app.errorhandler(404)
 def api_not_found(error):
-    return response(ResponseCode.API_NOT_FOUND)
+    return response(ResponseCode.ENTRY_NOT_FOUND)
 
 
 @app.errorhandler(500)
