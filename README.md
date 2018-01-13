@@ -39,13 +39,13 @@ flask-skeleton的目的是想把这些重复的事情都先统一做成脚手架
     │   ├── sqls                                            数据库变更增量sql统一存放位置
     │   │   └── v0.0.0_demo.sql                             demo示例的sql（命名风格按flyway规范）
     │   └── supervisor.conf                                 supervisor配置
-    │── periodic_tasks                                  定时任务统一存放位置
-    │   ├── app.py                                      Celery主程序
-    │   ├── config.py                                   Celery beat配置
+    │── periodic_tasks                                      定时任务统一存放位置
+    │   ├── app.py                                          Celery主程序
+    │   ├── config.py                                       Celery beat配置
     │   ├── readme.md
-    │   └── tasks                                       Celery 任务统一存放位置
+    │   └── tasks                                           Celery 任务统一存放位置
     │       ├── __init__.py
-    │       └── print_tasks.py                          一个定时执行print的示例
+    │       └── print_tasks.py                              一个定时执行print的示例
     ├── README.md                                           :)
     └── requirements.txt                                    依赖库列表
 
