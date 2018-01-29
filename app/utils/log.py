@@ -62,7 +62,7 @@ def init_logger(logger_name,
     and print all log in console'''
     logging.setLoggerClass(AppLogger)
     formatter = logging.Formatter(
-        '%(asctime)s %(name)s %(levelname)s %(message)s', '%Y-%m-%d %H:%M:%S')
+        '[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S %z')
 
     log_files = {
         logging.DEBUG: os.path.join(log_path, logfile_name + '-debug.log'),
