@@ -55,7 +55,7 @@ class AppLogger(Logger):
 
 
 def init_logger(logger_name,
-                logfile_name=__name__,
+                logfile_name=settings.SERVICE_NAME,
                 logging_level=logging.DEBUG,
                 log_path=settings.LOG_PATH):
     '''save log to diffrent file by deffirent log level into the log path
@@ -69,8 +69,6 @@ def init_logger(logger_name,
         logging.INFO: os.path.join(log_path, logfile_name + '-info.log'),
         logging.WARNING: os.path.join(log_path, logfile_name + '-warning.log'),
         logging.ERROR: os.path.join(log_path, logfile_name + '-error.log'),
-        logging.CRITICAL:
-        os.path.join(log_path, logfile_name + '-critical.log')  # noqa
     }
 
     logger = logging.getLogger(logger_name)
@@ -90,9 +88,9 @@ def init_logger(logger_name,
     return logger
 
 
-logger = init_logger('werkzeug', settings.SERVICE_NAME)
+logger = init_logger(settings.SERVICE_NAME)
 if settings.LOG_PEEWEE_SQL:
-    pw_logger = init_logger('peewee', settings.SERVICE_NAME)
+    pw_logger = init_logger('peewee')
 
 
 def debug(msg, *args, **kwargs):
@@ -111,12 +109,6 @@ def warning(msg, *args, **kwargs):
 
 def error(msg, *args, **kwargs):
     logger.error(msg, *args, **kwargs)
-    if isinstance(msg, Exception):
-        sentry.captureException()
-
-
-def critical(msg, *args, **kwargs):
-    logger.critical(msg, *args, **kwargs)
     if isinstance(msg, Exception):
         sentry.captureException()
 
