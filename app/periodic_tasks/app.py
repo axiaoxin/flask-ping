@@ -1,7 +1,5 @@
-import sys
 from celery import Celery
 
-sys.path.append('..')
 
 app = Celery('tasks')
 app.config_from_object('config')
