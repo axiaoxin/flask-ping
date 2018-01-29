@@ -81,11 +81,12 @@ def init_logger(logger_name,
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
-    console_handler = logging.StreamHandler()
-    console_handler.name = "console"
-    console_handler.setLevel(logging.DEBUG)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    if settings.DEBUG:
+        console_handler = logging.StreamHandler()
+        console_handler.name = "console"
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
     return logger
 
 
