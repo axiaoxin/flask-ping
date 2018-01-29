@@ -16,6 +16,8 @@ DB_URL = config(
              '?max_connections=40&stale_timeout=300&charset=utf8mb4'))
 SENTRY_DSN = config('SENTRY_DSN', default=None)
 
+# 10:DEBUG 20:INFO 30:WARNING 40:ERROR
+LOG_LEVEL = config('LOG_LEVEL', default=20, cast=int)
 LOG_PATH = config("LOG_PATH", default='/tmp/')
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)

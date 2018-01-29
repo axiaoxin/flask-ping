@@ -56,7 +56,7 @@ class AppLogger(Logger):
 
 def init_logger(logger_name,
                 logfile_name=settings.SERVICE_NAME,
-                logging_level=logging.DEBUG,
+                logging_level=settings.LOG_LEVEL,
                 log_path=settings.LOG_PATH):
     '''save log to diffrent file by deffirent log level into the log path
     and print all log in console'''
@@ -90,7 +90,7 @@ def init_logger(logger_name,
 
 logger = init_logger(settings.SERVICE_NAME)
 if settings.LOG_PEEWEE_SQL:
-    pw_logger = init_logger('peewee')
+    pw_logger = init_logger('peewee', logging_level=logging.DEBUG)
 
 
 def debug(msg, *args, **kwargs):
