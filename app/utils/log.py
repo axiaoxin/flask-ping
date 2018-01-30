@@ -11,6 +11,7 @@ import sys
 from logging import raiseExceptions
 from logging import Logger
 from functools import wraps
+from logging.handlers import TimedRotatingFileHandler
 
 from extensions import sentry
 import settings
@@ -74,7 +75,7 @@ def init_logger(logger_name,
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging_level)
     for log_level, log_file in log_files.items():
-        file_handler = logging.FileHandler(log_file)
+        file_handler = TimedRotatingFileHandler(log_file, 'midnight', 1, 7)
         file_handler.setLevel(log_level)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
