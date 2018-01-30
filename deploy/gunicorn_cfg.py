@@ -2,11 +2,11 @@ import os
 import sys
 from multiprocessing import cpu_count
 
-import settings
 
 root_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 app_path = os.path.join(root_path, 'app')
 sys.path.append(app_path)
+import settings
 
 proc_name = settings.SERVICE_NAME
 bind = settings.API_BIND
