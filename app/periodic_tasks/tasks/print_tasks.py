@@ -16,6 +16,5 @@ def print_arg(arg):
 
 @celery_app.task
 def print_args(*args):
-    #with distlock('print_args:%s' % args):
-        logger.info('print %s' % args)
-        return args
+    logger.info('print %s' % args)
+    return args
