@@ -64,7 +64,7 @@ def response(data=None, code=ResponseCode.SUCCESS, msg=None):
     else:
         result['msg'] = ResponseCodeMsg.get(code, '')
 
-    return jsonify_(result)
+    return jsonify_(result), code if code > 100 else 200
 
 
 def keyerror_response(func):
