@@ -1,8 +1,11 @@
+import sys
+sys.path.append('..')
 from celery.schedules import crontab
+from decouple import config
 
-broker_url = 'redis://'
+broker_url = config('BROKER_URL', default='redis://localhost:6379/1')
 
-result_backend = 'redis://'
+result_backend = config('RESULT_BACKEND', default='redis://localhost:6379/1')
 
 timezone = 'Asia/Shanghai'
 

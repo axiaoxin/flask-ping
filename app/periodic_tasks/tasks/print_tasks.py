@@ -1,11 +1,10 @@
-from app import app
+from celery_main import celery_app
 
-
-@app.task
+@celery_app.task
 def print_arg(arg):
     print arg
 
 
-@app.task
+@celery_app.task
 def print_args(*args):
     print args

@@ -8,11 +8,11 @@ cd into the root path of the project
 
 - run a celery worker to consume the tasks
 
-    celery worker -A app -l debug
+    celery worker -A celery_main -l debug
 
 - run a celery beat to produce the tasks periodically
 
-    celery beat -A app -l debug
+    celery beat -A celery_main -l debug
 
 
 ### Add task

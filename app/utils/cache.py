@@ -54,7 +54,7 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, tag='', namespace='views'):
 
 
 @contextmanager
-def distlock(name, timeout=60 * 60 * 24, blocking_timeout=None):
+def distlock(name, timeout=settings.REDIS_LOCK_TIMEOUT, blocking_timeout=None):
     key = 'distlock:' + name
     lock = redis_client.lock(
         name=key,
