@@ -5,10 +5,12 @@ import urlparse
 from contextlib import contextmanager
 from functools import wraps
 
-import settings
-import utils
 from flask import request
 from redis import Redis
+from redis.exceptions import LockError
+
+import settings
+import utils
 
 redis_client = Redis.from_url(settings.REDIS_URL)
 
@@ -52,10 +54,12 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, tag='', namespace='views'):
 
 
 @contextmanager
-def distlock(name, timeout=None, blocking=False, blocking_timeout=None):
-    try:
-        lock = redis_client.lock(name='distlock:' + name, timeout=timeout)
-        lock.acquire(blocking=blocking, blocking_timeout=blocking_timeout)
-        yield lock
-    finally:
-        lock.release()
+def distlock(name, timeout=60 * 60 * 24, blocking_timeout=None):
+    key = 'distlock:' + name
+    lock = redis_client.lock(
+        name=key,
+        timeout=timeout,
+        blocking_timeout=blocking_timeout)
+    if lock.acquire():
+        yield
+    lock.release()

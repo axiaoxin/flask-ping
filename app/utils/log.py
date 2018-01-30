@@ -106,8 +106,6 @@ def info(msg, *args, **kwargs):
 
 def warning(msg, *args, **kwargs):
     logger.warning(msg, *args, **kwargs)
-    if isinstance(msg, Exception):
-        sentry.captureException()
 
 
 def error(msg, *args, **kwargs):
