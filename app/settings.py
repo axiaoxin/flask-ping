@@ -3,7 +3,6 @@ import os
 
 from decouple import config
 
-
 DEBUG = config('DEBUG', default=False, cast=bool)
 JSON_AS_ASCII = config('JSON_AS_ASCII', default=False, cast=bool)
 JSON_KEYCASE = config('JSON_KEYCASE', default=None)

@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import gevent
-from gevent.monkey import patch_all
-patch_all()  # noqa
-
-import time
-import os
 import logging
+import os
 import sys
-from logging import raiseExceptions
-from logging import Logger
+import time
 from functools import wraps
+from logging import Logger, raiseExceptions
 from logging.handlers import TimedRotatingFileHandler
 
-from extensions import sentry
+import gevent
+from gevent.monkey import patch_all
+
 import settings
 import utils
+from extensions import sentry
+
+patch_all()  # noqa
 
 
 class AppLogger(Logger):
@@ -63,7 +63,8 @@ def init_logger(logger_name,
     and print all log in console'''
     logging.setLoggerClass(AppLogger)
     formatter = logging.Formatter(
-        '[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S %z')
+        '[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s',
+        '%Y-%m-%d %H:%M:%S %z')
 
     log_files = {
         logging.DEBUG: os.path.join(log_path, logfile_name + '-debug.log'),
