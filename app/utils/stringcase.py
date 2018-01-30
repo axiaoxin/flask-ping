@@ -134,7 +134,7 @@ def sentencecase(string):
         return string
     return capitalcase(trimcase(
         re.sub(r"[A-Z]", lambda matched: joiner +
-                                         lowercase(matched.group(0)), string)
+               lowercase(matched.group(0)), string)
     ))
 
 
