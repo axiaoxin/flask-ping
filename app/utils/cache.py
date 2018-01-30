@@ -62,4 +62,4 @@ def distlock(name, timeout=60 * 60 * 24, blocking_timeout=None):
         blocking_timeout=blocking_timeout)
     if lock.acquire():
         yield
-    lock.release()
+        lock.release()
