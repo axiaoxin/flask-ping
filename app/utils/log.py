@@ -73,7 +73,8 @@ def init_logger(logger_name,
     }
 
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging_level)
+    level = logging.getLevelName(logging_level.upper())
+    logger.setLevel(level)
     for log_level, log_file in log_files.items():
         file_handler = TimedRotatingFileHandler(log_file, 'midnight', 1, 7)
         file_handler.setLevel(log_level)
@@ -91,7 +92,7 @@ def init_logger(logger_name,
 
 logger = init_logger(settings.SERVICE_NAME)
 if settings.LOG_PEEWEE_SQL:
-    pw_logger = init_logger('peewee', logging_level=logging.DEBUG)
+    pw_logger = init_logger('peewee', logging_level='DEBUG')
 
 
 def debug(msg, *args, **kwargs):

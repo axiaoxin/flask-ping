@@ -9,15 +9,14 @@ JSON_AS_ASCII = config('JSON_AS_ASCII', default=False, cast=bool)
 JSON_KEYCASE = config('JSON_KEYCASE', default=None)
 
 SERVICE_NAME = config('SERVICE_NAME', default='flask-skeleton')
-API_URL = config('API_URL', default='http://localhost:5000')
+API_BIND = config('API_URL', default='localhost:5000')
 DB_URL = config(
     'DB_URL',
     default=('mysql+pool+retry://root:root@localhost:3306/test'
              '?max_connections=40&stale_timeout=300&charset=utf8mb4'))
 SENTRY_DSN = config('SENTRY_DSN', default=None)
 
-# 10:DEBUG 20:INFO 30:WARNING 40:ERROR
-LOG_LEVEL = config('LOG_LEVEL', default=20, cast=int)
+LOG_LEVEL = config('LOG_LEVEL', default='info')
 LOG_PATH = config("LOG_PATH", default='/tmp/')
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)
