@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
+sys.path.append('..')
 from celery import Celery
 from celery.utils.log import get_task_logger
 

@@ -1,5 +1,3 @@
-import sys
-sys.path.append('..')
 from celery.schedules import crontab
 from decouple import config
 

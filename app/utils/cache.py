@@ -53,13 +53,22 @@ def cached(expire=settings.CACHED_EXPIRE_SECONDS, tag='', namespace='views'):
     return cached_deco
 
 
-@contextmanager
-def distlock(name, timeout=settings.REDIS_LOCK_TIMEOUT, blocking_timeout=None):
-    key = 'distlock:' + name
+def get_redislock(name, timeout=settings.REDIS_LOCK_TIMEOUT, blocking_timeout=None):
+    ''' Useage:
+
+    lock = get_redislock('print_arg:%s' % arg, blocking_timeout=1)
+    if lock.acquire():
+        try:
+            do_something
+        finally:
+            lock.release()
+    else:
+        logger.warning('blocking')
+
+    '''
+    key = 'lock:' + name
     lock = redis_client.lock(
         name=key,
         timeout=timeout,
         blocking_timeout=blocking_timeout)
-    if lock.acquire():
-        yield
-        lock.release()
+    return lock
